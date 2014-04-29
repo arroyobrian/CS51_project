@@ -1,7 +1,5 @@
 import searcher
 
-
-
 def evaluate(board):
 
     chains = list(board.chain_cells(board.get_current_player_id))
@@ -11,8 +9,6 @@ def evaluate(board):
     twos = filter(lambda x: len(x) = 2, chains)
 
     return (len(fours) * 99999999 + len(threes) * 1000 + len(twos) * 10)
-
-
 
 def next_moves(board):
     """ Figures out legal moves the player can make from this position """
@@ -32,7 +28,7 @@ def terminal(depth, board):
     return depth >= 0 or board.is_game_over
 
 
-def minimax(board, depth):
+def absearch(board, depth, a, b):
     """
     Minimax search to the specified depth on the specified board.
     Returns an integer, the column number that the search reccommends to add a pieve
@@ -40,19 +36,28 @@ def minimax(board, depth):
 
     tree = maketree(board, "MIN")
 
-    cvals = []
-    if depth = 1:
+    if terminal(depth, board):
+        return evaluate(tree.board.get_board_array)
+    elif tree.node_type = "MAX":
         for i in tree.children[i]:
-            cvals.append(evaluate(tree.children[i].get_board_array))
-            if tree.node_type = "MIN":
-                return min(cvals) 
-            else:
-                return max (cvals)
-    elif depth = 0:
-        raise Exception('Search Depth Too Far')
+            a = (max(a, 
+                absearch(tree.children[i].get_board_array, depth - 1, a, b)),
+                tree.children[i]) 
+            if b <= a:
+                break #betacutoff, not max enough, throw out branch
+            return a
     else:
         for i in tree.children[i]:
-            cvals.append(tree.children[i].get_board_array)
-        if tree.node_type = "MIN"
+            b = (min(b, 
+                absearch(tree.children[i].get_board_array, depth - 1, a, b)),
+            tree.children[i])
+            if b <= a:
+                break #alphacutoff, not min enough, throw out branch
+            return b
+
+
+# sample inital absearch call:
+# absearch(current_board, depth, -inf, inf)
+            
 
         
