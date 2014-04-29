@@ -1,5 +1,7 @@
 import searcher
 
+
+
 def evaluate(board):
 
     chains = list(board.chain_cells(board.get_current_player_id))
@@ -38,5 +40,19 @@ def minimax(board, depth):
 
     tree = maketree(board, "MIN")
 
-    if depth:
+    cvals = []
+    if depth = 1:
+        for i in tree.children[i]:
+            cvals.append(evaluate(tree.children[i].get_board_array))
+            if tree.node_type = "MIN":
+                return min(cvals) 
+            else:
+                return max (cvals)
+    elif depth = 0:
+        raise Exception('Search Depth Too Far')
+    else:
+        for i in tree.children[i]:
+            cvals.append(tree.children[i].get_board_array)
+        if tree.node_type = "MIN"
+
         
